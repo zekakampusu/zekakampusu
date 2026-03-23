@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zeka Kampüsü — Satılık Marka</title>
+  <meta name="description" content="Tescilli Zeka Kampüsü markası ve zekakampusu.com domaini satışa sunulmuştur." />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #050a14;
+      --bg2:       #0a1628;
+      --blue:      #00aaff;
+      --green:     #00ffaa;
+      --purple:    #7b2fff;
+      --text:      #e0eeff;
+      --muted:     #6888aa;
+      --card:      rgba(0,170,255,0.05);
+      --border:    rgba(0,170,255,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── Canvas ── */
+    #neural-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* ── Layout ── */
+    .wrap { position: relative; z-index: 1; }
+
+    section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding-top: 40px;
+    }
+
+    .brain-icon {
+      font-size: 72px;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 0 24px var(--blue));
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { filter: drop-shadow(0 0 20px var(--blue)); transform: scale(1); }
+      50%       { filter: drop-shadow(0 0 40px var(--green)); transform: scale(1.06); }
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 40px;
+    }
+
+    /* Typewriter */
+    #typewriter {
+      font-family: 'Courier New', monospace;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--green);
+      border-right: 2px solid var(--green);
+      padding-right: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 2.8s steps(36,end) 0.5s forwards,
+                 blink 0.8s step-end infinite;
+      margin-bottom: 48px;
+    }
+
+    @keyframes typing { to { width: 36ch; } }
+    @keyframes blink  { 50% { border-color: transparent; } }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.25), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .btn:hover::after { opacity: 1; }
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(0,170,255,0.35);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 32px rgba(0,170,255,0.55); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--blue);
+      border: 2px solid var(--blue);
+      box-shadow: 0 0 12px rgba(0,170,255,0.2);
+    }
+    .btn-outline:hover { box-shadow: 0 0 24px rgba(0,170,255,0.4); }
+
+    /* ── Section titles ── */
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      margin-bottom: 40px;
+      line-height: 1.2;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      border-radius: 2px;
+      margin: 0 auto 48px;
+    }
+
+    /* ── Value cards ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+
+    .card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 0 28px rgba(0,170,255,0.15);
+      transform: translateY(-4px);
+    }
+
+    .card-icon { font-size: 2rem; margin-bottom: 14px; }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Patent block ── */
+    .patent-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
+
+    .patent-item .label {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .patent-item .value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(0,255,170,0.15), rgba(0,170,255,0.15));
+      border: 1px solid var(--green);
+      color: var(--green);
+      border-radius: 50px;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* ── Domain ── */
+    .domain-display {
+      text-align: center;
+      padding: 48px 0;
+    }
+
+    .domain-name {
+      font-family: 'Courier New', monospace;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 900;
+      color: var(--green);
+      text-shadow: 0 0 30px rgba(0,255,170,0.5);
+      letter-spacing: 2px;
+    }
+
+    .domain-meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 12px;
+    }
+
+    /* ── Form ── */
+    #teklif {
+      background: var(--bg2);
+      border-radius: 0;
+    }
+
+    #teklif > .inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    input, textarea, select {
+      background: rgba(0,170,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(0,170,255,0.1);
+    }
+
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+
+    select option { background: var(--bg2); }
+
+    textarea { resize: vertical; min-height: 120px; }
+
+    .submit-wrap { text-align: center; margin-top: 8px; }
+
+    #form-status {
+      margin-top: 16px;
+      font-size: 0.9rem;
+      min-height: 24px;
+      text-align: center;
+    }
+
+    .status-ok  { color: var(--green); }
+    .status-err { color: #ff5555; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Scroll indicator ── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .scroll-hint::after {
+      content: '↓';
+      display: block;
+      text-align: center;
+      font-size: 1.2rem;
+      margin-top: 4px;
+    }
+
+    @keyframes bounce {
+      0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+      50%       { opacity: 1;   transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+      .patent-box { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="neural-canvas"></canvas>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="brain-icon">🧠</div>
+    <h1><span class="gradient-text">Zeka Kampüsü</span></h1>
+    <p class="tagline">Tescilli marka · Premium domain · Sınırsız potansiyel</p>
+    <div id="typewriter">Bir sonraki büyük EdTech markası senin.</div>
+    <div class="hero-buttons">
+      <a href="#teklif" class="btn btn-primary">⚡ Teklif Gönder</a>
+      <a href="#marka" class="btn btn-outline">Detayları İncele</a>
+    </div>
+    <div class="scroll-hint">Keşfet</div>
+  </section>
+
+  <!-- MARKA DEĞERİ -->
+  <section id="marka" style="text-align:center;">
+    <div class="section-label">Neden Bu Marka?</div>
+    <h2>Akıllı bir yatırım için<br><span class="gradient-text">güçlü bir başlangıç</span></h2>
+    <div class="divider"></div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <h3>Net Konumlandırma</h3>
+        <p>Eğitim + teknoloji kesişiminde hem "zeka" hem "kampüs" kavramını tek isimde birleştiriyor.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <h3>Premium .com Domain</h3>
+        <p>zekakampusu.com — kısa, akılda kalıcı, Türkçe EdTech pazarında benzersiz.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏛️</div>
+        <h3>Yasal Güvence</h3>
+        <p>Türk Patent ve Marka Kurumu nezdinde tescilli. Kullanım hakkı devrediliyor.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🚀</div>
+        <h3>Hazır Altyapı</h3>
+        <p>Marka + domain + tescil belgesi — sıfırdan başlamak yerine kurumsal bir kimliğe kavuş.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📈</div>
+        <h3>Büyüyen Pazar</h3>
+        <p>Türkiye'de online eğitim pazarı hızla büyüyor. Doğru isim, doğru zamanda.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔒</div>
+        <h3>Rakipsiz İsim</h3>
+        <p>Sektörde başka bir "Zeka Kampüsü" yok. Markanın tüm gücü yeni sahibine geçiyor.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATENT & DOMAIN -->
+  <section id="patent" style="text-align:center;">
+    <div class="section-label">Teknik Detaylar</div>
+    <h2>Tescil & <span class="gradient-text">Domain Bilgisi</span></h2>
+    <div class="divider"></div>
+
+    <div class="patent-box" style="margin-bottom:40px;">
+      <div class="patent-item">
+        <div class="label">Marka Adı</div>
+        <div class="value">Zeka Kampüsü</div>
+      </div>
+      <div class="patent-item">
+        <div class="label">Tescil Numarası</div>
+        <div class="value">2024 019324</div>
+      </div>
+      <div class="patent-item">
+        <div class="label">Kurum</div>
+        <div class="value">Türk Patent ve Marka Kurumu</div>
+      </div>
+      <div class="patent-item">
+        <div class="label">Durum</div>
+        <div class="value"><span class="badge">✓ Tescilli</span></div>
+      </div>
+    </div>
+
+    <div class="domain-display">
+      <div class="domain-name">zekakampusu.com</div>
+      <div class="domain-meta">Aktif domain · Anında devir · .com uzantısı</div>
+    </div>
+  </section>
+
+  <!-- TEKLİF FORMU -->
+  <section id="teklif" style="padding:0;">
+    <div class="inner">
+      <div style="text-align:center;">
+        <div class="section-label">İletişim</div>
+        <h2>Teklif <span class="gradient-text">Gönder</span></h2>
+        <div class="divider"></div>
+      </div>
+
+      <form id="offer-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Ad Soyad</label>
+            <input type="text" id="name" name="name" placeholder="Adınız" required />
+          </div>
+          <div class="form-group">
+            <label for="email">E-posta</label>
+            <input type="email" id="email" name="email" placeholder="ornek@sirket.com" required />
+          </div>
+          <div class="form-group">
+            <label for="company">Şirket / Kurum</label>
+            <input type="text" id="company" name="company" placeholder="Opsiyonel" />
+          </div>
+          <div class="form-group">
+            <label for="interest">İlgi Alanı</label>
+            <select id="interest" name="interest">
+              <option value="marka-domain">Marka + Domain</option>
+              <option value="sadece-domain">Sadece Domain</option>
+              <option value="sadece-marka">Sadece Marka Tescili</option>
+              <option value="bilgi">Bilgi Almak İstiyorum</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label for="message">Mesajınız</label>
+            <textarea id="message" name="message" placeholder="Teklifiniz veya sorularınız..."></textarea>
+          </div>
+        </div>
+        <div class="submit-wrap">
+          <button type="submit" class="btn btn-primary" style="font-size:1.05rem; padding:16px 40px;">
+            ⚡ Teklifi Gönder
+          </button>
+          <div id="form-status"></div>
+        </div>
+      </form>
+
+      <p style="text-align:center; margin-top:32px; color:var(--muted); font-size:0.9rem;">
+        Doğrudan ulaşmak için:
+        <a href="mailto:emrahtunc@windowslive.com" style="color:var(--blue); text-decoration:none;">
+          emrahtunc@windowslive.com
+        </a>
+      </p>
+    </div>
+  </section>
+
+</div><!-- /wrap -->
+
+<footer>
+  <p>© 2024 Zeka Kampüsü · Tescil No: 2024 019324 · Türk Patent ve Marka Kurumu</p>
+</footer>
+
+<script>
+/* ── Neural Canvas ── */
+const canvas = document.getElementById('neural-canvas');
+const ctx    = canvas.getContext('2d');
+let W, H, nodes;
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  initNodes();
+}
+
+function initNodes() {
+  const count = Math.floor((W * H) / 14000);
+  nodes = Array.from({ length: count }, () => ({
+    x:  Math.random() * W,
+    y:  Math.random() * H,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4,
+    r:  Math.random() * 2 + 1,
+  }));
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Lines
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      const d  = Math.sqrt(dx * dx + dy * dy);
+      if (d < 140) {
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        const alpha = (1 - d / 140) * 0.5;
+        ctx.strokeStyle = `rgba(0,170,255,${alpha})`;
+        ctx.lineWidth   = 0.8;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Nodes
+  nodes.forEach(n => {
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fillStyle = '#00aaff';
+    ctx.fill();
+
+    n.x += n.vx;
+    n.y += n.vy;
+    if (n.x < 0 || n.x > W) n.vx *= -1;
+    if (n.y < 0 || n.y > H) n.vy *= -1;
+  });
+
+  requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', resize);
+resize();
+draw();
+
+/* ── Form ── */
+document.getElementById('offer-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const status = document.getElementById('form-status');
+  const data   = new FormData(this);
+  const body   = `Ad Soyad: ${data.get('name')}\nE-posta: ${data.get('email')}\nŞirket: ${data.get('company') || '-'}\nİlgi: ${data.get('interest')}\nMesaj: ${data.get('message') || '-'}`;
+
+  // Formspree ile gönder (ücretsiz, kurulum gerekmez)
+  fetch('https://formspree.io/f/meerbpyn', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body:    JSON.stringify({
+      name:    data.get('name'),
+      email:   data.get('email'),
+      company: data.get('company'),
+      interest:data.get('interest'),
+      message: data.get('message'),
+      _replyto: data.get('email'),
+    }),
+  })
+  .then(r => {
+    if (r.ok) {
+      status.textContent = '✓ Teklifiniz alındı! En kısa sürede dönüş yapacağız.';
+      status.className   = 'status-ok';
+      document.getElementById('offer-form').reset();
+    } else {
+      throw new Error();
+    }
+  })
+  .catch(() => {
+    status.textContent = '✗ Gönderim başarısız. Lütfen doğrudan e-posta ile ulaşın.';
+    status.className   = 'status-err';
+  });
+});
+</script>
+</body>
+</html>
